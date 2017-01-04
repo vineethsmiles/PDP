@@ -1,0 +1,45 @@
+<div id="content-header" class="mini">
+      <h1>Modules</h1>
+</div>
+
+<div id="breadcrumb">
+      <a href="#dashboard" title="Home" class="tip-bottom" data-original-title="Home"><i class="fa fa-home"></i>Home</a>
+      <a href="#modulesList" title="Modules" class="current">Modules</a>
+</div>
+
+<div class="alert alert-success" ng-show="alert">
+    <button class="close" data-dismiss="alert">×</button>
+    <strong><center>{{errMsg}}</center></strong> 
+</div>
+
+<div class="container-fluid">
+   <center><img style = "position: absolute; z-index: 9999" ng-show="loading"
+              src="img/ajax-loader.gif"></center>
+   <form class="form-horizontal">
+      <div class="row">
+         <div class="col-xs-10">
+            <button ng-show="isModulesListAdmin && !loading && !alert" type="button" class="btn btn-primary btn-xs" ng-click="addModules()">Create New Module</button>
+            <button ng-show="isModulesListAdmin && !loading && !alert" type="button" class="btn-danger btn-xs" ng-disabled="disabled" ng-click="deleteSelectedModule()">Delete Selected Module</button>
+         </div>
+         <div class="col-xs-10" ng-show="!loading && !alert">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon">
+                  <i class="fa fa-wrench"></i>
+                  </span>
+                  <h5>Modules</h5>
+                  <div class="right-inner-addon">
+                    <i class="fa fa-search"></i>
+                    <input type="search" style="margin-top:2px; margin-right:2px" ng-model="filterOptions.filterText" class="btn-xs pull-right" placeholder="Search.."></input>
+                  </div>
+               </div>
+               <div class="widget-content nopadding">
+                  <div class="gridStyle-pdp-admin" ng-grid="modulesListgridOptions">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </form>
+</div>   
+

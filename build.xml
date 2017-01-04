@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="PDP" default="default">
+    <property file="build.properties"/>
+    <property environment="env"/> 
+    <description>
+            Scripts for PDP admin.
+    </description>
+    <condition property="isWindows">
+        <os family="windows" />
+    </condition>
+
+     <condition property="isLinux">
+        <os family="unix" />
+     </condition>
+    
+    <target name="clean">
+        <delete dir="${basedir}/public"/>
+    </target>
+    
+    <target name="grunt_build_windows" if="isWindows">
+        <exec executable="cmd" failonerror="true">
+            <arg value="/c"/>
+            <arg value="npm"/>
+            <arg value="install"/>
+            <arg value="bower"/>
+        </exec>
+        <exec executable="cmd" failonerror="true">
+            <arg value="/c"/>
+            <arg value="npm"/>
+            <arg value="install"/>
+        </exec>
+        <exec executable="cmd" failonerror="true">
+            <arg value="/c"/>
+            <arg value="bower"/>
+            <arg value="install"/>
+        </exec>
+        <exec executable="cmd" failonerror="true">
+            <arg value="/c"/>
+            <arg value="grunt"/>
+        </exec>
+        <copy todir="public/content/pdp-admin-web" overwrite="true">
+            <fileset dir="dist/content/pdp-admin-web">
+                <include name="scripts/**"/>
+                <include name="unicorn/*"/>
+                <include name="vendor/*"/>
+                <include name="styles/*"/>
+                <include name="views/*"/>
+                <include name="fonts/*"/>
+                <include name="img/*"/>
+                <include name="index.html"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="grunt_build_linux" if="isLinux">
+        <exec executable="${node.linux.home}/bin/npm" failonerror="true">
+            <env key="PATH" value="${env.PATH}:${node.linux.home}/bin"/>
+            <arg value="install"/>
+            <arg value="bower"/>
+        </exec>
+        <exec executable="${node.linux.home}/bin/npm" failonerror="true">
+            <env key="PATH" value="${env.PATH}:${node.linux.home}/bin"/>
+            <arg value="install"/>
+        </exec>
+        <exec executable="${node.linux.home}/bin/${bower.linux.exec}" failonerror="true">
+            <env key="PATH" value="${env.PATH}:${node.linux.home}/bin"/>
+            <arg value="install"/>
+        </exec>
+        <exec executable="${node.linux.home}/bin/${grunt.linux.exec}" failonerror="true">
+            <env key="PATH" value="${env.PATH}:${node.linux.home}/bin"/>
+        </exec>
+        <copy todir="public/content/pdp-admin-web" overwrite="true">
+            <fileset dir="dist/content/pdp-admin-web">
+                <include name="scripts/**"/>
+                <include name="unicorn/*"/>
+                <include name="vendor/*"/>
+                <include name="styles/*"/>
+                <include name="views/*"/>
+                <include name="fonts/*"/>
+                <include name="img/*"/>
+                <include name="index.html"/>
+            </fileset>
+        </copy>
+    </target>
+    
+    <!-- ================================= 
+          target: create_deploy_zip              
+         ================================= -->
+    <target name="create_deploy_zip" depends="grunt_build_linux, grunt_build_windows" description="description">
+        <tar destfile="${basedir}/target/pdp_admin_deploy.tar">
+             <fileset dir="${basedir}/public"/>
+        </tar>
+    </target>
+
+    
+    <!-- ================================= 
+          target: default              
+         ================================= -->
+    <target name="default" depends="create_deploy_zip" description="Deploys the appliction to the nginx server">
+        <copy todir="${pdpDeployDir}/public" overwrite="true">
+            <fileset dir="${basedir}/public">
+           </fileset>
+        </copy>
+    </target>
+    
+</project>

@@ -1,0 +1,23 @@
+@CHARSET "UTF-8";
+
+.form-group .store-config-label {
+	
+	padding-top: 0;
+}
+
+#store-config-container .store-config-btn-insert {
+	
+	margin-right: 5px;
+}
+
+#store-edit-form  .has-error .help-inline {
+	
+	font-size: 10px;
+}
+
+#store-edit-form  .form-actions {
+	
+	padding: 10px 40px 10px 300px;
+
+}
+

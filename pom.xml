@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.shc.whitelabel.admin</groupId>
+	<artifactId>pdp-admin-web</artifactId>
+	<version>1.0-SNAPSHOT</version>
+
+	<properties>
+		<deploy.version>${project.version}</deploy.version>
+	</properties>
+	<scm>
+		<developerConnection>scm:git:git@git301p.prod.ch3.s.com:pdp/pdp-admin-web.git</developerConnection>
+	</scm>
+	<distributionManagement>
+		<repository>
+			<id>obuartifactoryvip.prod.ch3.s.com</id>
+			<name>ObuReleaseRepo</name>
+			<url>http://obuartifactoryvip.prod.ch3.s.com/artifactory/libs-release-local</url>
+		</repository>
+	</distributionManagement>
+	<repositories>
+<repository>
+<snapshots>
+<enabled>false</enabled>
+</snapshots>
+<id>libs-rel</id>
+<name>libs-release</name>
+<url>
+http://obuartifactoryvip.prod.ch3.s.com/artifactory/libs-release
+</url>
+</repository>
+<repository>
+<snapshots />
+<id>lib-snap</id>
+<name>libs-snapshot</name>
+<url>
+http://obuartifactoryvip.prod.ch3.s.com/artifactory/libs-snapshot
+</url>
+</repository>
+</repositories>
+<pluginRepositories>
+<pluginRepository>
+<snapshots>
+<enabled>false</enabled>
+</snapshots>
+<id>plugin-rel</id>
+<name>plugins-rel</name>
+<url>
+http://obuartifactoryvip.prod.ch3.s.com/artifactory/plugins-release
+</url>
+</pluginRepository>
+<pluginRepository>
+<snapshots />
+<id>plug-snap</id>
+<name>plugins-snap</name>
+<url>
+http://obuartifactoryvip.prod.ch3.s.com/artifactory/plugins-snapshot
+</url>
+</pluginRepository>
+</pluginRepositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>rhino</groupId>
+									<artifactId>js</artifactId>
+									<version>1.7R2</version>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>build-admin-web</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
+							<target>
+								<property name="mavenVersion" value="${project.version}" />
+								<ant antfile="build.xml" />
+							</target>
+						</configuration>
+					</execution>
+					<execution>
+						<phase>generate-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<tasks>
+								<tstamp>
+									<format property="last.updated" pattern="yyyyMMdd" />
+								</tstamp>
+								<echo file="${project.build.directory}/build_version.properties" message="build.date=${last.updated}" />
+							</tasks>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>ant-contrib</groupId>
+						<artifactId>ant-contrib</artifactId>
+						<version>1.0b3</version>
+						<exclusions>
+							<exclusion>
+								<groupId>ant</groupId>
+								<artifactId>ant</artifactId>
+							</exclusion>
+						</exclusions>
+					</dependency>
+					<dependency>
+						<groupId>org.apache.ant</groupId>
+						<artifactId>ant</artifactId>
+						<version>1.8.4</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<finalName>${project.artifactId}-${project.version}</finalName>
+					<descriptors>
+						<descriptor>distribution.xml</descriptor>
+					</descriptors>
+				</configuration>
+				<executions>
+					<execution>
+						<id>web-package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<resources>
+			<resource>
+				<directory>${project.build.directory}</directory>
+				<includes>
+					<include>build_version.properties</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+	<profiles>
+		<profile>
+			<id>download</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${deploy.version}</version>
+									<classifier>web-package</classifier>
+									<type>zip</type>
+								</artifactItem>
+								<artifactItem>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>${project.artifactId}</artifactId>
+									<version>${deploy.version}</version>
+									<type>jar</type>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>pdp-sonar</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>rhino</groupId>
+											<artifactId>js</artifactId>
+											<version>1.7R2</version>
+										</artifactItem>
+									</artifactItems>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.7</version>
+						<executions>
+							<execution>
+								<id>build-web</id>
+								<phase>compile</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpathref="maven.plugin.classpath" />
+									<taskdef resource="org/sonar/ant/antlib.xml" classpathref="maven.plugin.classpath" />
+									<target>
+										<property name="mavenVersion" value="${project.version}" />
+										<ant antfile="build.xml">
+											<target name="default" />
+											<target name="sonar" />
+										</ant>
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>org.codehaus.sonar-plugins</groupId>
+								<artifactId>sonar-ant-task</artifactId>
+								<version>2.0</version>
+							</dependency>
+							<dependency>
+								<groupId>ant-contrib</groupId>
+								<artifactId>ant-contrib</artifactId>
+								<version>1.0b3</version>
+								<exclusions>
+									<exclusion>
+										<groupId>ant</groupId>
+										<artifactId>ant</artifactId>
+									</exclusion>
+								</exclusions>
+							</dependency>
+							<dependency>
+								<groupId>org.apache.ant</groupId>
+								<artifactId>ant</artifactId>
+								<version>1.8.4</version>
+							</dependency>
+						</dependencies>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

@@ -1,0 +1,39 @@
+<div id="content-header" class="mini">
+      <h1>Stores</h1>
+</div>
+
+<div id="breadcrumb">
+      <a href="#dashboard" title="Home" class="tip-bottom" data-original-title="Home"><i class="fa fa-home"></i>Home</a>
+      <a href="#storesList" title="Stores" class="current">Stores</a>
+</div>  
+
+<div class="alert alert-success" ng-show="alert">
+    <button class="close" data-dismiss="alert">×</button>
+    <strong><center>{{errMsg}}</center></strong> 
+</div>
+
+<div class="container-fluid">
+<center><img style = "position: absolute; z-index: 9999" ng-show="loading" 
+           src="img/ajax-loader.gif"></center>
+<div class="col-xs-10">
+   <button ng-show="isStoreListAdmin && !loading && !alert" type="button" class="btn-danger btn-xs" ng-click="addStores()">Create New Store</button>
+  <div ng-show='storesInfo' class="widget-box">
+  <div class="widget-title">
+    <span class="icon">
+      <i class="fa fa-tags"></i>                
+    </span>
+    <h5>Stores</h5>
+  </div>
+    <div class="widget-content nopadding" id="qa-current-param-values">
+    <table class="table table-bordered table-striped table-hover fixed-header">
+      <tbody>
+        <tr ng-repeat="value in storesList track by $index | orderBy:'name'">
+                <td><a ng-href="#storeEdit" ng-click="storeSelected(value.id, value.name)">
+                {{value.name}}</a></td>
+        </tr>
+      </tbody>
+       </table>
+    </div>
+  </div>  
+</div>
+</div>

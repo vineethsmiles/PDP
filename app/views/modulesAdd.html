@@ -1,0 +1,116 @@
+<script type="text/ng-template" id="moduleAddConfirmation.html">
+    <div class="modal-body">
+        <div class="alert alert-info" role="alert">
+          <center>{{errorMsg}}</center>
+        </div>
+    </div>
+    <div class="modal-footer">
+            <button class="btn btn-warning" ng-click="$close()">OK</button>
+    </div>
+</script>
+
+<div id="content-header" class="mini">
+      <h1>Modules</h1>
+</div>
+
+<div id="breadcrumb">
+      <a href="#dashboard" title="" class="tip-bottom" data-original-title="Home"><i class="fa fa-home"></i>Home</a>
+      <a href="#modulesList" title="Modules" class="current">Modules</a>
+      <a href="#modulesAdd" title="New Module" class="current">New Module</a>
+</div>	
+
+<div class="container-fluid">
+   <form method="POST" accept-charset="UTF-8" class="form-horizontal" id="auth-form">
+      <div class="row">
+         <div class="col-xs-8">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon">
+				             <i class="fa fa-align-justify"></i>         
+                  </span>
+                  <h5>Config: New Module</h5>
+               </div>
+               <div class="widget-content nopadding">
+                     <div class="form-group">
+                        <label class="col-sm-5 col-md-5 col-lg-3 control-label">Name</label>
+                        <div class="col-sm-5 col-md-5 col-lg-6">
+                           <input class="form-control input-sm" type="text" 
+                           ng-required="true" ng-model="addModule.moduleName"/>
+                        </div>
+                     </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-xs-8">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon">
+                     <i class="fa fa-align-justify"></i>         
+                  </span>
+                  <h5>Parameters</h5>
+               </div>
+               <div class="widget-content">
+                  <div class="widget-box" ng-repeat="i in parameters track by $index">
+                     <div class="widget-title">
+                        <a ng-click="isCollapsed = !isCollapsed">
+                           <span class="icon"><i class="fa fa-arrow-right"></i></span>
+                           <h5>{{i.name}}</h5>
+                        </a>
+                        <button class="btn btn-danger btn-xs pull-right row-delete-btn" type="button" ng-click="deleteModuleParameter($index)">Delete</button>
+                     </div>
+                     <div collapse="isCollapsed" class="widget-content nopadding">
+                           <div class="form-group">
+                              <label class="col-sm-5 col-md-5 col-lg-3 control-label">
+                              Name</label>
+                              <div class="col-sm-5 col-md-5 col-lg-6">
+                                <input ng-required="true" name="new_parameter_name{{$index}}" type="text" class="form-control input-sm param-name-field" ng-model="i.name"/>
+                              </div>
+                           </div>
+                           <div class="form-group">
+                              <label class="col-sm-5 col-md-5 col-lg-3 control-label">Input Type
+                              </label>
+                                     <select style="margin-left:17px;" ui-select2 ng-model="i.inputType" 
+                                     ng-required="true"
+                                     ng-change="inputTypeSelect(i)"
+                                     data-placeholder="select input type...">
+                                               <option value=""></option>
+                                               <option>text</option>
+                                               <option>textarea</option>
+                                               <option>select</option>
+                                     </select>
+                                     <div ng-switch on="i.inputType" class="form-group">
+                                       <div ng-switch-when="select" class="form-group"  
+                                           ng-repeat="op in i.options track by $index">
+                                           <label class="col-sm-5 col-md-5 col-lg-3 control-label">
+                                           option{{$index+1}}</label>
+	                                       <input style="margin-left:17px; width:170px;" type="text" class="col-md-5 col-lg-4 input-sm" ng-model="op.opName" placeholder="option.."/>
+	                                       <button type="button" style="margin-left:30px; float:left"
+	                                       class="btn btn-danger btn-xs module-delete-btn" ng-click="deleteOptions(i.options, $index)">Delete
+	                                       </button>
+                                      </div>
+                                      <button ng-switch-when="select" type="button" 
+	                                     style="margin-right:30px; float:right" ng-click="addOptions(i, i.options)" class="btn btn-xs btn-inverse btn-module-option-add">
+                                        + Add Option                                 
+                                      </button>
+                                   </div>
+                           </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-11 col-md-11 col-lg-12">
+                        <button class="btn btn-xs btn-inverse pull-right" ng-click="addParameters()">
+                           + Add Parameter
+                        </button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <div class="col-sm-8" align="center">
+         <button type="submit" class="btn btn-primary" ng-click="createModule(addModule, parameters)">Save</button>
+      </div>
+   </form>
+</div>

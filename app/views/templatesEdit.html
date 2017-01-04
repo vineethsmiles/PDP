@@ -1,0 +1,348 @@
+<script type="text/ng-template" id="updateConfirmation.html">
+    <div class="modal-body">
+        <div class="alert alert-info" role="alert">
+          <center>{{errorMsg}}</center>
+        </div>
+    </div>
+    <div class="modal-footer">
+            <button class="btn btn-warning" ng-click="$close()">OK</button>
+    </div>
+</script>
+
+<div id="content-header" class="mini">
+   <h1>Template:{{templateData.data.template.name}}</h1>
+</div>
+
+<div id="breadcrumb">
+   <a href="#dashboard" title="" class="tip-bottom" data-original-title="Home"><i class="fa fa-home"></i>Home</a>
+   <a href="#templatesList" title="Stores" class="current">Templates</a>
+   <a href="#editTemplate" title="Edit Template" class="current">Edit {{templateData.data.template.name}}</a>
+</div>
+
+<div ng-show="saveAlert" class="alert alert-info" style="display: block;">
+      <button class="close" data-dismiss="alert">×</button>
+      <center><strong>{{errMsg}}</strong></center>
+</div>
+
+<div class="container-fluid">
+   <form name="templateEditForm" class="form-horizontal">
+      <div class="row">
+         <!--Begin Inheritance -->
+         <div class="col-xs-8">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon">
+                   <i class="fa fa-file"></i>                  
+                  </span>
+                  <h5>Inheritance</h5>
+               </div>
+               <div class="widget-content nopadding">
+                  <form class="form-horizontal">
+                     <div class="form-group">
+                     <label class="col-sm-5 col-md-5 col-lg-3 control-label">Enable</label>
+                     <div class="col-sm-5 col-md-5 col-lg-6">
+                     <input id="enableToggle" type="checkbox" name="editTemp-inherit-toggle"/>
+                     </div>
+                     </div>
+                     <div class="form-group">
+                        <label class="col-sm-5 col-md-5 col-lg-3 control-label">Parent Template</label>
+                        <div class="col-sm-5 col-md-5 col-lg-6">
+                           <select id="enableSelect" ui-select2 ng-model="templateData.data.template.inherits.parent.name" data-placeholder="Select parent template..." disabled>
+                           <option value=""></option>
+                           <option ng-repeat="i in parentTemplateList">{{i.name}}</option>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="form-group">
+                       <label class="col-sm-5 col-md-5 col-lg-3 control-label">Children</label>
+                       <div class="col-sm-5 col-md-5 col-lg-6">        
+                        <button class="btn btn-default" 
+                        ng-disabled="children.length === 0"
+                          ng-click="isCollapsed = !isCollapsed">
+                          <i class="fa fa-chevron-down"></i>
+                          children&nbsp{{children.length}}
+                        </button>       
+                       </div>
+                        <div class="col-sm-7 col-md-7 col-lg-8" collapse="isCollapsed">
+                           <div class="well well-lg">
+                              <ul>
+                                  <li ng-repeat="child in children">
+                                      <a ng-click="childtemplateSelection(child.id)"
+                                      tooltip="{{(child.inherits).toString()}}" 
+                                      tooltip-placement="right" class="child-list-item">{{child.name}}
+                                      </a>
+                                  </li>
+                              </ul>
+                           </div> 
+                        </div>                   
+                    </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+         <!--End Inheritance -->
+         <!--Begin Config:-->
+         <div class="col-xs-8">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon">
+                  <i class="fa fa-file"></i>                 
+                  </span>
+                  <h5>Config: {{templateData.data.template.name}}</h5>
+               </div>
+               <div class="widget-content nopadding">
+                  <form class="form-horizontal">
+                     <div class="form-group">
+                        <label class="col-sm-5 col-md-5 col-lg-3 control-label">Name</label>
+                        <div class="col-sm-5 col-md-5 col-lg-6">
+                           <input class="form-control input-sm" type="text" ng-model="templateData.data.template.name"/>
+                        </div>
+                     </div>
+                     <div class="form-group">
+                        <label class="col-sm-5 col-md-5 col-lg-3 control-label">templateName
+                        </label>
+                        <div class="col-sm-5 col-md-5 col-lg-6">
+                           <input class="form-control input-sm" type="text" ng-model="templateData.data.template.template"/>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+         <!--End Config:-->
+         <!--Begin Keys -->
+         <div class="col-xs-8">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon">
+                  <i class="fa fa-key"></i>                 
+                  </span>
+                  <h5>Keys</h5>
+               </div>
+               <div class="widget-content nopadding">
+                  <form class="form-horizontal">
+                   <div class="form-group" ng-repeat="(templateKeyK, templateVal) in templateData.data.template.keys">
+                    <label class="col-sm-5 col-md-5 col-lg-3 control-label" contenteditable ng-model="templateVal.tKey" strip-br="true"/>
+                     <div class="col-sm-5 col-md-5 col-lg-6">
+                        <div class="col-sm-5 col-md-5 col-lg-8">
+                          <select ng-if="checkTemplateKeyForSelectBoxForStore(templateVal.tKey)" ui-select2 ng-model="templateVal.tVal" data-placeholder="Select store...">
+                              <option value=""></option>
+                              <option ng-repeat="i in strNameList">{{i.name}}</option>
+                           </select>
+                          <select ng-if="checkTemplateKeyForSelectBoxForType(templateVal.tKey)" ui-select2 ng-model="templateVal.tVal" data-placeholder="Select Type...">
+                              <option value=""></option>
+                              <option ng-repeat="i in typeList">{{i}}</option>
+                           </select>
+                           <div ng-if="checkTemplateKeyForSearchBox(templateVal.tKey)" class="input-group input-group-sm">   
+                               <span  class="input-group-addon">
+                                <i class="fa fa-search"></i>
+                               </span>
+                              <input type="search" style="width:200px" class="form-control" ng-model="templateVal.tVal" placeholder="Search items..." ng-change="searchTemplate(templateVal.tVal)" typeahead="i.name for i in searchResultArray" am-reset-field/>
+                            </div>
+                            <input ng-if="checkTemplateKeyForInputBox(templateVal.tKey)" class="form-control input-sm" type="text" ng-model="templateVal.tVal"/>
+                        </div>
+                         <button ng-if="checkTemplateKeyForInputBox(templateVal.tKey)" type="button" class="btn btn-danger btn-xs template-key-btn-delete" ng-click="deleteKeys(templateKeyK, templateVal)">Delete
+                         </button>
+                     </div>
+                     </div>
+                     <div class="row">
+                        <div class="col-sm-11 col-md-11 col-lg-12">
+                           <button class="btn btn-xs btn-inverse pull-right" id="btn-template-key-add" ng-click="editTempAddKeyParams()">+ Add Key
+                           </button>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+         <!--End Keys -->
+         <!--Begin Modules -->
+         <div class="col-xs-8">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon"><i class="fa fa-gear"></i></span>
+                  <h5>Modules</h5>
+               </div>
+               <div class="widget-content">
+                  <div class="widget-box row-container" ng-repeat="(modRowKey, modRowVal) in templateData.data.template.modules">
+                     <div class="widget-title row-title">
+                        <span ng-click="isCollapsedCol = !isCollapsedCol">
+                           <span class="icon"><i class="fa fa-th"></i></span>
+                           <h5>{{modRowKey}}</h5>
+                           <span ng-show="templateData.data.template.inherits.parent.name && ['row1', 'row2','row3'].contains(modRowKey) && 
+                           (parentTemplateList !== null)" style="float:right; margin-right:6px" 
+                           class="checkbox">
+                             <label>
+                                  <input type="checkbox" ng-model="rowCheckedVal"
+                                  ng-click="rowBoxChecked(modRowKey, templateData.data.template.inherits.containers, rowCheckedVal, templateData.data.template.inherits.parent.name)" ng-checked="templateData.data.template.inherits.containers.contains(modRowKey) || searchStringInArray(modRowKey, templateData.data.template.inherits.containers)"
+                                  ng-disabled="['row2'].contains(modRowKey) && searchStringInArray(modRowKey, templateData.data.template.inherits.containers)"/>
+                                  <b>Inherit</b>
+                             </label>
+                           </span>
+                        </span>
+                        <button ng-show="checkRowForDeleteButton(modRowKey)" type="button" class="btn btn-danger btn-xs pull-right module-delete-btn" ng-click="deleteModuleRow(modRowKey)">Delete</button>
+                     </div>
+               <div collapse="isCollapsedCol" class="widget-content">
+                <div class="widget-box col-container" ng-repeat="(colKey, colValue) in modRowVal">
+                           <div class="widget-title col-title">
+                              <button
+                              type="button" class="btn btn-danger btn-xs pull-right module-delete-btn" ng-click="deleteColumn(colKey, modRowVal)"
+                              ng-show="checkRowForDeleteButton(modRowKey)">Delete
+                              </button>
+                              <span ng-click="isCollapsed = !isCollapsed">
+                                 <span class="icon"><i class="fa fa-columns"></i></span>
+                                 <h5>{{colKey}}</h5>
+                                 <span ng-show="templateData.data.template.inherits.parent.name && (parentTemplateList !== null) && 
+                                 ['row2'].contains(modRowKey) &&
+                                 searchForColumnReference(colKey, modRowKey)"
+                                 style="float:right; margin-right:6px" class="checkbox">
+                                   <label>
+                                     <input type="checkbox" ng-model="checkedVal"
+                                     ng-true-value="true"
+                                     ng-false-value="false"
+                                     ng-click="colBoxChecked(colKey, modRowKey, templateData.data.template.inherits.containers, checkedVal, templateData.data.template.inherits.parent.name)"
+                                     ng-checked="inheritColumnCheck(colKey, modRowKey, templateData.data.template.inherits.containers)"
+                                     />
+                                     <b>Inherit</b>
+                                   </label>
+                                 </span>
+                              </span>
+                           </div>
+                     <div collapse="isCollapsed" class="widget-content" droppable drop="handleDrop" bin="bin" id="{{modRowKey}}+{{colKey}}+{{colValue}}">
+                           <div class="in" style="margin-left:15px;" ng-repeat="(modItemKey, modItemValue) in colValue track by $index">
+                                 <div class="widget-box">
+                                   <div class="widget-title">
+                                   <a ng-click="isCollapsedModule = !isCollapsedModule">
+                                  <span class="icon"><i class="fa fa-wrench"></i></span>
+                                    <h5>{{getKey(modItemValue)}}</h5>
+                                   </a>
+                                    <button type="button" class="btn btn-danger btn-xs pull-right module-delete-btn" ng-click="deleteModule(modItemKey,colValue)"
+                                    ng-disabled="inheritColumnCheck(colKey, modRowKey, templateData.data.template.inherits.containers)">Delete</button>
+                                    </div>
+                                    <fieldset ng-repeat="(itemKey,itemValue) in modItemValue" collapse="isCollapsedModule" class="widget-content nopadding">
+                                       <div disable-field=item ng-repeat="item in itemValue" class="form-group">
+                                          <label class="col-sm-5 col-md-5 col-lg-4 control-label">
+                                                      {{item.id}}
+                                          </label>
+                                             <div ng-switch="domCheck(item)" class="col-sm-5 col-md-5 col-lg-6">
+                                                   <select ng-switch-when="select" ui-select2 data-placeholder="select one.." ng-model="item.param"
+                                                   ng-disabled="inheritColumnCheck(colKey, modRowKey, templateData.data.template.inherits.containers)">
+                                                     <option value=""></option>
+                                                     <option ng-repeat="op in selectOptions track by $index" ng-bind="op" value="{{op}}"></option>
+                                                   </select>
+                                                   <input ng-switch-when="text" class="form-control input-sm" ng-model="item.param"
+                                                   ng-disabled="inheritColumnCheck(colKey, modRowKey, templateData.data.template.inherits.containers)"/>
+                                                   <textarea rows="6" ng-switch-when="textarea" class="form-control input-sm" ng-model="item.param"
+                                                   ng-disabled="inheritColumnCheck(colKey, modRowKey, templateData.data.template.inherits.containers)">
+                                                   </textarea>
+                                                 </div>
+                                             </div>
+                                       </fieldset>
+                                    </div>
+                                </div>
+                             </div>
+                        </div>
+
+                        <div class="row add-col">
+                           <div class="col-sm-11 col-md-11 col-lg-12">
+                              <button class="btn btn-xs btn-inverse pull-right btn-template-column-add" ng-click="modulesAddNewCol(modRowVal)"
+                              ng-show="checkRowForDeleteButton(modRowKey)">
+                              + Add Column
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row add-row">
+                     <div class="col-sm-11 col-md-11 col-lg-12">
+                        <button class="btn btn-xs btn-inverse pull-right" id="btn-template-row-add" ng-click="modulesAddNewRow()">
+                           + Add Row
+                        </button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>              
+         <!--End Modules -->
+         <!--Begin Change Message -->
+         <div class="col-xs-8">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon"><i class="fa fa-comments"></i></span>
+                  <h5>Change Message</h5>
+               </div>
+               <div class="widget-content">
+                  <form class="form-horizontal">
+                     <div class="form-group">
+                        <label class="col-sm-5 col-md-5 col-lg-3 control-label">Describe the change(s) you are making:
+                        <span ng-show="!templateData.data.template.message"
+                        style="color: red;" ng-show="!templateData.data.template.message"><div class="icon"><i class="fa fa-warning"></i>Required</div>
+                        </span>
+                        </label>
+                        <div class="col-sm-5 col-md-5 col-lg-6">
+                           <textarea rows="5" name="update_message"
+                           placeholder="change message is required to update.." cols="50" ng-model="templateData.data.template.message"></textarea>
+                        </div>
+                     </div>
+                  </form>
+               </div>
+            </div>
+            <!-- UPDATE button -->
+            <div align="center">
+               <button ng-show="isTemplateEditAdmin" type="submit" class="btn btn-primary" id="btn-template-edit-submit" ng-click="updateTemplate(templateData)"
+               ng-disabled="!templateData.data.template.message">Update
+               </button>
+            </div>
+            <!--End UPDATE button -->
+         </div>
+         <!--End Change Message -->
+         <!--Begin Revisions -->
+         <div class="col-xs-8">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon"><i class="fa fa-undo"></i></span>
+                  <h5>Revisions</h5>
+               </div>
+               <div class="widget-content nopadding">
+                  <table class="table table-bordered table-striped table-hover">
+                     <thead>
+                        <tr>
+                           <th>Date</th>
+                           <th>User</th>
+                           <th>Message</th>
+                           <th></th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr ng-repeat="i in templateData.data.template.revisions">
+                            <td>{{i.updated}}</td>
+                            <td>{{i.user}}</td>
+                            <td>{{i.message}}</td>
+                            <td><button class="btn btn-primary btn-xs btn-revision-revert" ng-click="revertRevision(i.id)">Revert</button></td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+         </div>
+         <!--End Revisions -->
+      </div>
+   </form>
+</div>
+<!--Begin Modules sticky sidebar -->
+<div id="sticky-module-sidebar">
+   <h4 align="center" style="color:white">Modules</h4>
+   <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="input-group">
+         <input type="text" class="form-control" ng-model="searchText" placeholder="Type and Search"/>
+         <span class="input-group-addon">
+            <i class="fa fa-search"></i>
+         </span>
+      </div>
+      <div id="module-content">
+         <div class="moduleList" id="{{value}}" ng-repeat="value in modulesList | filter:searchText"
+         draggable>{{value.name}}</div>
+      </div>
+   </div>
+</div>
+<!--End Modules sticky sidebar -->

@@ -1,0 +1,67 @@
+<script type="text/ng-template" id="modelPopUp.html">
+    <div class="modal-header">
+            <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <span class="modal-title">Application versions in <b>{{currentEnvironment}}</b> environment </span>
+    </div>
+    <div class="modal-body">
+        <div>
+          <center><img style = "z-index: 9999" ng-show="loading" 
+          src="img/ajax-loader.gif"></center>
+        </div>
+        <div class="alert alert-success" ng-show="alert">
+          <button class="close" data-dismiss="alert">×</button>
+          <strong><center>{{errorMsg}}</center></strong> 
+        </div>
+         <accordion close-others="accordianToggle">
+            <accordion-group ng-repeat="i in operationConfig" is-open="status.open">
+              <accordion-heading>
+                 {{i.app}}<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+              </accordion-heading>
+               <table class="table table-bordered">
+                             <tbody>
+                               <tr ng-repeat="(key, value) in i"> 
+                                  <td>{{key}}</td>
+                                  <td>{{value}}</td> 
+                               </tr>
+                             </tbody>
+               </table>
+            </accordion-group>
+         </accordion>
+    </div>
+</script>
+
+<div id="sidebar" ng-controller="sideBarNavCtrl">
+            <ul>
+                  <li id="dashboard"><a href="#dashboard" ng-click="reloadPage()"><i class="fa fa-home"></i>
+                    <span>Dashboard</span></a>
+                  </li>
+
+                  <li id="pageConfigurations" class="submenu">
+                          <a>
+                          <i class="fa fa-gears"></i><span>Page Configurations</span>
+                          <i class="arrow fa fa-chevron-right"></i>
+                          </a>
+                          <ul>
+                              <li markable><a href="#templatesList" ng-click="reloadPage()">Templates</a></li>
+                              <li markable><a href="#storesList" ng-click="reloadPage()">Stores</a></li>
+                              <li markable><a href="#modulesList" ng-click="reloadPage()">Modules</a></li>
+                          </ul>
+                  </li>
+
+                  <li id="operations" class="submenu"><a><i class="fa fa-wrench"></i>
+                          <span>Operations</span>
+                          <i class="arrow fa fa-chevron-right"></i></a>
+                          <ul>
+                              <li markable><a href="#operations" ng-click="reloadPage()">Operations Config</a></li>
+                              <li markable><a href="#Qa_Job_Queue" ng-click="reloadPage()">Status</a></li>
+                              <li markable><a href="#featureFlag" ng-click="reloadPage()">Feature Flags</a></li>
+                          </ul>
+                  </li>
+
+                  <li id="activitylog">
+                     <a href="#activityLog" ng-click="reloadPage()">
+                       <i class="fa fa-clock-o"></i> <span>Activity Log</span>
+                     </a>
+                  </li>
+            </ul>
+ </div>

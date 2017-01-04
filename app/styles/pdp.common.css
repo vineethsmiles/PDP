@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+
+#login-btn {
+	
+	margin: 5px 0 5px 0;
+}
+
+#content  #pdp-unsaved-alert {
+	
+	display: none;
+}
+
+.widget-box .widget-title .btn {
+	
+	 line-height: 12px;
+	 margin: 8px 5px 0px 0px;
+}
+
+a#pdp-undo-changes {
+	
+	font-weight: bold;
+}

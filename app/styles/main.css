@@ -1,0 +1,130 @@
+.gridStyle-pdp-admin {
+    border: 1px solid rgb(212,212,212);
+    height: 440px; 
+}
+
+.gridStyleQaEnv {
+    border: 1px solid rgb(212,212,212);
+    width: 731px; 
+    height: 300px;
+}
+
+.gridStyleOperationsPage{
+    border: 1px solid rgb(212,212,212);
+    width: 1075px; 
+    height: 400px;
+}
+
+.gridStyleJobQueue{
+    border: 1px solid rgb(212,212,212);
+    height: 470px;
+}
+
+.gridStyleStoreEditPage{
+    border: 1px solid rgb(212,212,212);
+    width: 802px; 
+    height: 300px;
+}
+
+.gridStyleStoreEditMbox{
+    border: 1px solid rgb(212,212,212);
+    width: 802px; 
+    height: 200px;
+}
+
+.gridWidthWrapper {
+    width: 100%;
+    overflow: hidden;
+}
+
+.grid_icon {
+     float: right;
+     padding-right: 20px;
+}
+
+#sticky-module-sidebar{
+     position:fixed;
+     top:40%;
+     left:75%;
+     opacity:0.9;
+     width:310px;
+     height:350px;
+     background:#000000;
+     border-radius: 15px;
+     filter:alpha(opacity=90);
+     box-shadow: 2px 3px 5px #888;
+}
+
+.moduleList {
+        background-color: #DCDCDC;
+        width: 240px;
+        margin-left: auto ;
+        margin-right: auto ;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        min-height: 25px;
+        border: 2px;
+        cursor: move;
+        font-weight: bold;
+        text-align: center;
+        overflow: hidden;
+        padding-top: 3px;
+}
+
+#module-content {
+            height: 250px; 
+            border-radius: 10px;
+            background: #696969;
+            padding: 3px; 
+            overflow: auto;
+}
+
+[contenteditable]:focus {
+    border-style: dashed;
+    border-color: black;
+    border-width: 1px;
+}
+
+.labelHighlight {
+    border-style: dashed;
+    border-color: black;
+    border-width: 1.5px;
+}
+
+.SUCCESS {
+    background-color: crimson;
+}
+
+.RUN {
+    background-color: blue;
+}
+
+.DEPLOYED {
+    background-color: yellow;
+}
+
+.FAILED {
+    background-color: red;
+}
+
+.QUEUED {
+    background-color: orange;
+}
+
+.drag {
+  background-color: orange;
+}
+
+.right-inner-addon {
+    position: relative;
+}
+.right-inner-addon input {
+    padding-right: 30px;    
+}
+.right-inner-addon i {
+    position: absolute;
+    right: 0px;
+    padding: 10px 12px;
+    pointer-events: none;
+}

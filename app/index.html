@@ -1,0 +1,115 @@
+<!doctype html>
+<html ng-app="adminToolApp">
+  <head>
+    <meta charset="utf-8">
+    <title>SHC PDP Admin</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <link rel="stylesheet" href="styles/bootstrap.css" />
+    <link rel="stylesheet" href="styles/ng-grid.css" />
+    <link rel="stylesheet" href="styles/select2.css" />
+    <link rel="stylesheet" href="styles/angular-ui-switch.css" />
+    <link rel="stylesheet" href="styles/bootstrap-switch.css" />
+    <link rel="stylesheet" href="styles/font-awesome.css"/>
+    <link rel="stylesheet" href="styles/jquery-ui.css"/>
+    <link rel="stylesheet" href="styles/unicorn.css"/>
+    <link rel="stylesheet" href="styles/pdp.common.css"/>
+    <link rel="stylesheet" href="styles/select2.css"/>
+    <link rel="stylesheet" href="styles/pdp.config.css"/>
+    <link rel="stylesheet" href="styles/pdp.store.css"/>
+    <link rel="stylesheet" href="styles/pdp.module.css"/>
+    <link rel="stylesheet" href="styles/pdp.template.css"/>
+    <link rel="stylesheet" href="styles/main.css"/> 
+ </head>
+ 
+ <body data-color="grey" class="old">
+ <div id="wrapper">
+ <div id="header">
+  <h1><a href="">SHC PDP Admin</a></h1>
+   <a id="menu-trigger" href="#">
+     <i class="fa fa-bars"></i>
+   </a>
+ </div>
+
+<form name ="userNav">
+  <div id="user-nav" ng-controller="headerPanelCtrl">
+    <select ng-show="firstName !== null" name="selectBox" id="sel" ui-select2 ng-model="envChange" data-placeholder="Select Environment" 
+    ng-change="environmentSelect(envChange)">
+    <option value=""></option>
+    <option ng-repeat="i in environments">{{i.id}}</option> 
+    </select>
+    <ul class="btn-group" style="width: auto; margin: 0px;">
+       <li ng-show="firstName !== null" ng-click="open()" class="btn"><a title='Versions'><i class="fa fa-check"></i> <span class="text">Versions</span></a></li> 
+       <li ng-show="firstName !== null" class="btn"><a title='{{firstName}}'><i class="fa fa-user"></i> <span class="text">Welcome,&nbsp{{firstName}}</span></a></li> 
+       <li ng-show="firstName !== null" class="btn" ng-click="logOut()"><a title="Logout"><i class="fa fa-share"></i> <span class="text">Logout</span></a></li>
+    </ul> 
+  </div>
+</form>
+
+ <ng-include src ="'views/sideBarNavigation.html'"></ng-include>
+ <div id="content">
+      <div ng-view=""></div>
+ </div>
+ <div class="row">
+      <div id="footer"  class="col-xs-12">
+      </div>
+ </div>
+ </div>
+</body>
+
+        <script src="vendor/jquery.js"></script>
+        <script src="vendor/angular.js"></script>
+        <script src="vendor/bootstrap.js"></script>
+        <script src="vendor/angular-resource.js"></script>
+        <script src="vendor/angular-route.js"></script>
+        <script src="vendor/angular-sanitize.js"></script>
+        <script src="vendor/ng-grid.js"></script>
+        <script src="vendor/angular-local-storage.js"></script>
+        <script src="vendor/select2.js"></script>
+        <script src="vendor/ui-select2.js"></script>
+        <script src="vendor/angular-ui-switch.js"></script>
+        <script src="vendor/ui-bootstrap-tpls.js"></script>
+        <script src="vendor/angular-jwt.js"></script>
+        <script src="vendor/bootstrap-switch.js"></script>
+        <script src="vendor/angular-ui-switch.js"></script>
+  
+        <script src="scripts/app.js"></script>
+        <script src="scripts/controllers/dashboardController.js"></script>
+        <script src="scripts/controllers/storesListController.js"></script>
+        <script src="scripts/controllers/storesAddController.js"></script>
+        <script src="scripts/controllers/templatesListController.js"></script>
+        <script src="scripts/controllers/templatesAddController.js"></script>
+        <script src="scripts/controllers/modulesListController.js"></script>
+        <script src="scripts/controllers/modulesAddController.js"></script>
+        <script src="scripts/controllers/activityLogController.js"></script>
+        <script src="scripts/controllers/jobQueueController.js"></script>
+        <script src="scripts/controllers/operationsController.js"></script>
+        <script src="scripts/controllers/sideBarNavController.js"></script>
+        <script src="scripts/controllers/loginController.js"></script>
+        <script src="scripts/controllers/headerPanelController.js"></script>
+        <script src="scripts/controllers/featureFlagController.js"></script>
+        <script src="scripts/controllers/versionsPopUpController.js"></script>
+        <script src="scripts/controllers/storeEditController.js"></script>
+        <script src="scripts/controllers/templatesEditController.js"></script>
+        <script src="scripts/controllers/templatePopUpController.js"></script>
+        <script src="scripts/controllers/modulesEditController.js"></script>
+        <script src="scripts/controllers/templateCloneController.js"></script>
+        <script src="scripts/controllers/templateDeleteController.js"></script>
+
+        <script src="scripts/services/adminToolServices.js"></script>
+        <script src="scripts/services/adminToolUtilityService.js"></script>
+        <script src="scripts/services/environmentConfigService.js"></script>
+        <script src="scripts/services/envMsgService.js"></script>
+        <script src="scripts/directives/adminToolDirectives.js"></script>
+    
+        <script src="unicorn/jquery-ui.custom.js"></script>
+        <script src="unicorn/jquery.nicescroll.min.js"></script>
+        <script src="unicorn/unicorn.js"></script>
+        <script src="unicorn/bootstrap-colorpicker.js"></script>
+        <script src="unicorn/bootstrap-datepicker.js"></script>
+        <script src="unicorn/jquery.icheck.min.js"></script>
+        <script src="unicorn/unicorn.form_common.js"></script>
+        <script src="unicorn/jquery.dataTables.min.js"></script>
+</html>
+  

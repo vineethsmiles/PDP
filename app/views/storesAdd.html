@@ -1,0 +1,79 @@
+<script type="text/ng-template" id="addStoreConfirmation.html">
+    <div class="modal-body">
+        <div class="alert alert-info" role="alert">
+          <center>{{errorMsg}}</center>
+        </div>
+    </div>
+    <div class="modal-footer">
+            <button class="btn btn-warning" ng-click="$close()">OK</button>
+    </div>
+</script>
+
+<div id="content-header" class="mini">
+      <h1>Stores</h1>
+</div>
+
+<div id="breadcrumb">
+      <a href="#dashboard" title="" class="tip-bottom" data-original-title="Home"><i class="fa fa-home"></i>Home</a>
+      <a href="#storesList" title="Stores" class="current">Stores</a>
+      <a href="#storesAdd" title="New Store" class="current"> New Store</a>
+</div>	
+
+<div ng-show="saveAlert" class="alert alert-info" style="display: block;">
+		<button class="close" data-dismiss="alert">×</button>
+		<center>{{errMsg}}</center>
+</div>
+
+<div class="container-fluid">
+		<form method="POST" accept-charset="UTF-8" class="form-horizontal">
+		<div class="row">
+				<div class="col-xs-9">
+					<div class="widget-box">
+						<div class="widget-title">
+							<span class="icon">
+								<i class="fa fa-align-justify"></i>
+							</span>
+							<h5>New Store Config</h5>
+							<button  ng-click="addParameters()" class="btn btn-xs btn-inverse pull-right">
+										+ Add Parameter	
+							</button>
+						</div>
+						<div class="widget-content nopadding" id="store-config-container">
+							<div class="form-group">
+								<label class="col-sm-5 col-md-5 col-lg-3 control-label">Name</label>
+								<div class="col-sm-5 col-md-5 col-lg-6">
+									<input class="form-control input-sm" ng-model="storeName" type="text" ng-required="true"/>				
+								</div>
+							</div>
+							<div ng-show="storeDetailsConfig.length>0" class="gridWidthWrapper">
+				               <div class="gridStyleStoreEditMbox" ng-grid="gridOptionsForStoreCreate">
+				               </div>
+							</div>
+						</div>	
+					 </div>
+			   </div>						
+		</div>
+		<div class="row">
+				<div class="col-xs-9">
+					<div class="widget-box">
+						<div class="widget-title">
+							<span class="icon">
+								<i class="fa fa-align-justify"></i>					
+							</span>
+							<h5>Test &amp; Target: mBox</h5>
+							<button type="button" class="btn btn-xs btn-inverse pull-right"  ng-click="addMboxParams()">
+							+ Add New</button>
+						</div>
+						<div ng-show="storeMbox.length>0" class="gridWidthWrapper">
+			               <div class="gridStyleStoreEditMbox" ng-grid="gridOptionsForStoreMboxParam">
+			               </div>
+                        </div>
+					</div>
+				</div>
+		</div>
+				
+		<div class="form-actions">
+			<button type="submit" class="btn btn-primary" ng-click="addStore(storeName, parameters, mBox)">Save</button>
+		</div>
+	</form>			
+</div>

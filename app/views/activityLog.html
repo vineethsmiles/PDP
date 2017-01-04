@@ -1,0 +1,53 @@
+<div id="content-header" class="mini">
+   <h1>Activity Log</h1>
+</div>
+<div id="breadcrumb">
+   <a href="#dashboard" title="" class="tip-bottom" data-original-title="Home"><i class="fa fa-home"></i>Home</a>
+   <a href="#activityLog" title="Activity Log" class="current">Activity Log</a>
+</div>
+
+<div class="alert alert-success" ng-show="alert">
+    <button class="close" data-dismiss="alert">×</button>
+    <strong><center>{{errMsg}}</center></strong> 
+</div>
+
+<div class="container-fluid">
+   <form class="form-horizontal">
+      <div class="row">
+         <div class="col-xs-10">
+            <label>Month: </label>
+            <select ui-select2 ng-model="selectedMonth">
+               <option value=""></option>
+               <option ng-repeat="month in monthSelection" ng-selected="selectedMonth">{{month.value}}</option>
+               </option>
+            </select>
+            <label>&nbsp;&nbsp;Year: </label>
+            <select ui-select2 ng-model="selectedYear">
+               <option value=""></option>
+               <option ng-repeat="year in yearSelection" ng-selected="selectedYear">{{year.value}}</option>
+            </select>&nbsp
+            <button type="submit" class="btn btn-primary btn-xs" ng-click="populateActivityLogdata(selectedMonth, selectedYear)">Go</button>
+            <br></br>
+            <center><img style = "z-index: 9999" ng-show="loading" 
+            src="img/ajax-loader.gif"></center>
+         </div>
+         <div class="col-xs-12" ng-show="!alert && !loading">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon">
+                  <i class="fa fa-clock-o"></i>
+                  </span>
+                  <h5>Log</h5>
+                  <div class="right-inner-addon">
+                    <i class="fa fa-search"></i>
+                    <input type="search" style="margin-top:2px; margin-right:2px" ng-model="filterOptions.filterText" class="btn-xs pull-right" placeholder="Search.."></input>
+                  </div>
+               </div>
+               <div class="widget-content nopadding">
+                  <div class="gridStyle-pdp-admin" ng-grid="activityLoggridOptions"></div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </form>
+</div>

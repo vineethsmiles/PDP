@@ -1,0 +1,96 @@
+<script type="text/ng-template" id="templateClonePopUp.html">
+   <div class="modal-header">
+               <h3 class="modal-title">Clone copy of {{name}}</h3>
+   </div>
+    <div class="modal-body">
+        <div class="alert alert-info" role="alert">
+          <div class="alert alert-success" ng-show="alert">
+              <button class="close" data-dismiss="alert">×</button>
+              <strong><center>{{errMsg}}</center></strong> 
+          </div>
+          <center>Template <strong>{{name}}</strong> existing Keys</center>
+          <table class="table table-bordered">
+              <tbody>
+                <tr ng-repeat="(key, value) in templateKey"> 
+                   <td>{{key}}</td>
+                   <td>{{value}}</td> 
+                </tr>
+              </tbody>
+          </table>
+        </div>
+            <i>Add Unique PIDs to clone the template <strong>{{name}}</strong>({{templateName}})</i>
+            <label class="col-sm-5 col-md-5 col-lg-3 control-label">Enter PIDs 
+            (comma-separated):
+            </label>
+            <textarea id="cloneIds" rows="6" cols="50" ng-model="pid">
+            </textarea>          
+    </div>
+    <div class="modal-footer">
+            <button class="btn btn-warning" ng-disabled="!pid || alert" ng-click="clone(pid)">Clone
+            </button>
+            <button class="btn btn-warning" ng-click="close('cancel')">Cancel</button>
+    </div>
+</script>
+
+<script type="text/ng-template" id="templateDeletePopUp.html">
+   <div class="modal-header">
+               <h3 class="modal-title">Delete Template</h3>
+   </div>
+    <div class="modal-body">
+        <div class="alert alert-info" role="alert">
+          <strong><center>{{msg}}</center></strong>
+        </div>         
+    </div>
+    <div class="modal-footer">
+            <button class="btn btn-warning" ng-show='delete' ng-click="deleteTemp()">Delete
+            </button>
+            <button class="btn btn-warning" ng-show='delete' ng-click="close('cancel')">Cancel</button>
+            <button class="btn btn-warning" ng-hide='delete' ng-click="close('cancel')">Close</button>
+    </div>
+</script>
+
+<div id="content-header" class="mini">
+   <h1>Templates</h1>
+</div>
+
+<div id="breadcrumb">
+   <a href="#dashboard" title="" class="tip-bottom" data-original-title="Home"><i class="fa fa-home"></i>Home</a>
+   <a href="#templatesList" title="Stores" class="current">Templates</a>
+</div>
+
+<div class="alert alert-success" ng-show="alert">
+    <button class="close" data-dismiss="alert">×</button>
+    <strong><center>{{errMsg}}</center></strong> 
+</div>
+
+<div class="container-fluid">
+   <center><img style = "position: absolute;" ng-show="loading" 
+               src="img/ajax-loader.gif"></center>
+   <form class="form-horizontal">
+      <div class="row">
+         <div class="col-xs-10">
+            <button ng-show="isTemplateListAdmin && !loading && !alert" type="button" class="btn btn-primary btn-xs" ng-click="createNewTemplate()">Create New Template</button>
+            <button ng-show="isTemplateListAdmin && !loading && !alert" type="button" ng-show="templatesList.length > 0"  class="btn-danger btn-xs" ng-disabled="disabled" ng-click="deleteSelectedTemplate()">
+            Delete Selected Template</button>
+         </div>
+         <div class="col-xs-12" ng-show="!loading && !alert">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon">
+                  <i class="fa fa-gears"></i>
+                  </span>
+                  <h5>Templates</h5>
+                  <div class="right-inner-addon">
+                    <i class="fa fa-search"></i>
+                    <input type="search" style="margin-top:2px; margin-right:2px" ng-model="filterOptions.filterText" class="btn-xs pull-right" placeholder="Search.."></input>
+                  </div>
+               </div>
+               <div class="widget-content nopadding">
+                  <div class="gridStyle-pdp-admin" ng-grid="gridOptions">
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </form>
+</div>

@@ -1,0 +1,271 @@
+<script type="text/ng-template" id="createConfirmation.html">
+    <div class="modal-body">
+        <div class="alert alert-info" role="alert">
+          <center>{{errorMsg}}</center>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-warning" ng-click="$close()">OK</button>
+    </div>
+</script>
+
+<div id="content-header" class="mini">
+   <h1>Template: New Template</h1>
+</div>
+
+<div id="breadcrumb">
+   <a href="#dashboard" title="" class="tip-bottom" data-original-title="Home"><i class="fa fa-home"></i>Home</a>
+   <a href="#templatesList" title="Stores" class="current">Templates</a>
+   <a href="#templatesAdd" title="New Template" class="current"> New Template</a>
+</div>
+
+<div ng-show="saveAlert" class="alert alert-info" style="display: block;">
+      <button class="close" data-dismiss="alert">×</button>
+      <center><strong>{{errMsg}}</strong></center>
+</div>
+
+<div class="container-fluid">
+<form name="templateEditForm" class="form-horizontal">
+<div class="row">
+   <div class="col-xs-8">
+      <!--Begin Inheritance widget -->
+      <div class="widget-box">
+         <div class="widget-title">
+            <span class="icon">
+            <i class="fa fa-file"></i>                  
+            </span>
+            <h5>Inheritance</h5>
+         </div>
+         <!-- content -->
+         <div class="widget-content nopadding">
+            <form class="form-horizontal">
+               <div class="form-group">
+                  <label class="col-sm-5 col-md-5 col-lg-3 control-label">Enable</label>
+                  <div class="col-sm-5 col-md-5 col-lg-6">
+                     <input type="checkbox" name="inherit-enable" checked> 
+                  </div>
+               </div>
+               <div class="form-group">
+                  <label class="col-sm-5 col-md-5 col-lg-3 control-label">Parent Template
+                  </label>
+                  <div class="col-sm-5 col-md-5 col-lg-6">
+                     <select id="enableSelect" ui-select2 ng-model="templateAdd.parentTempSelected" data-placeholder="Select parent template...">
+                        <option value=""></option>
+                        <option ng-repeat="i in parentTemplateList">{{i.name}}</option>
+                     </select>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+
+   <div class="col-xs-8">
+      <div class="widget-box">
+         <div class="widget-title">
+            <span class="icon">
+            <i class="fa fa-file"></i>                 
+            </span>
+            <h5>Config: New Template</h5>
+         </div>
+         <div class="widget-content nopadding">
+            <form class="form-horizontal">
+               <div class="form-group">
+                  <label class="col-sm-5 col-md-5 col-lg-3 control-label">Name</label>
+                  <div class="col-sm-5 col-md-5 col-lg-6">
+                     <input class="form-control input-sm" type="text" ng-model="templateAdd.name"/>
+                  </div>
+               </div>
+               <div class="form-group">
+               <label class="col-sm-5 col-md-5 col-lg-3 control-label">templateName</label>
+                  <div class="col-sm-5 col-md-5 col-lg-6">
+                  <input class="form-control input-sm" type="text" ng-model="templateAdd.template"/>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+
+    <div class="col-xs-8">
+      <div class="widget-box">
+         <div class="widget-title">
+            <span class="icon">
+            <i class="fa fa-key"></i>                 
+            </span>
+            <h5>Keys</h5>
+         </div>
+         <div class="widget-content nopadding">
+            <form class="form-horizontal">
+               <div class="form-group" ng-repeat="v in templateAdd.keys track by $index">
+                  <label contenteditable ng-model="v.tKey" strip-br="true"
+                   class="col-sm-5 col-md-5 col-lg-3 control-label"/>
+                  <div class="col-sm-5 col-md-5 col-lg-6">
+                     <select ng-if="checkKeysForStore(v.tKey)" ui-select2 
+                     ng-model="v.tVal" data-placeholder="Select Store...">
+                        <option value=""></option>
+                        <option ng-repeat="i in tempAddStrNameList">{{i.name}}</option>
+                     </select>
+                     <select ng-if="checkKeysForType(v.tKey)" ui-select2 
+                     ng-model="v.tVal" data-placeholder="Select Type...">
+                        <option value=""></option>
+                        <option ng-repeat="i in typeList">{{i}}</option>
+                     </select>
+                     <div ng-if="checkKeysForItemClass(v.tKey)" class="input-group input-group-sm">
+                         <span  class="input-group-addon">
+                          <i class="fa fa-search"></i>
+                         </span>
+                        <input type="search"  class="form-control" ng-model="v.tVal" placeholder="Search items..." ng-change="searchTemplate(v.tVal)" typeahead="i.name for i in searchResultArray" am-reset-field/>
+                     </div>
+                     <input ng-if="checkKeysForNotStore(v.tKey)" 
+                     class="form-control input-sm" type="text" ng-model="v.tVal"/>
+                  </div>
+                  <button ng-if="checkKeysForNotStore(v.tKey)" type="button" class="btn btn-danger btn-xs template-key-btn-delete"
+                  ng-click="templateAddDeleteKey($index)">Delete</button>
+               </div>
+
+               <div class="row">
+                  <div class="col-sm-11 col-md-11 col-lg-12">
+                     <button class="btn btn-xs btn-inverse pull-right" id="btn-template-key-add" ng-click="addKeysToTemplate()">+ Add Key                   
+                     </button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   </div>
+
+   <div class="col-xs-8">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon"><i class="fa fa-gear"></i></span>
+                  <h5>Modules</h5>
+               </div>
+               <div class="widget-content">
+                  <div class="widget-box row-container" ng-repeat="(modRowKey, modRowVal) in templateAdd.modules">
+                     <div class="widget-title row-title">
+                        <span ng-click="isCollapsedCol = !isCollapsedCol">
+                           <span class="icon"><i class="fa fa-th"></i></span>
+                           <h5>{{modRowKey}}</h5>
+                           <span ng-show="templateAdd.parentTempSelected 
+                           && ['row1', 'row2','row3'].contains(modRowKey)"
+                           style="float:right; margin-right:6px" class="checkbox">
+                             <label>
+                                  <input type="checkbox" ng-model="rowCheckedVal"
+                                  ng-click="getRowInherits(modRowKey, templateAdd.parentTempSelected, rowCheckedVal)"
+                                  ng-checked="searchStringInArray(modRowKey)"/>
+                                  <b>Inherit</b>
+                             </label>
+                           </span>
+                        </span>
+                        <button ng-show="checkRowForDeleteButton(modRowKey)" type="button" class="btn btn-danger btn-xs pull-right module-delete-btn" ng-click="deleteModuleRow(modRowKey)">Delete</button>
+                     </div>
+               <div collapse="isCollapsedCol" class="widget-content">
+                <div class="widget-box col-container" ng-repeat="(colKey, colValue) in modRowVal">
+                           <div class="widget-title col-title">
+                              <span ng-click="isCollapsed = !isCollapsed">
+                                 <span class="icon"><i class="fa fa-columns"></i></span>
+                                 <h5>{{colKey}}</h5>
+                                 <button ng-show="checkRowForDeleteButton(modRowKey)" type="button" class="btn btn-danger btn-xs pull-right module-delete-btn" ng-click="deleteColumn(colKey, modRowVal)"
+                                 ng-disabled="searchStringInArray(modRowKey) && rowCheckedVal">Delete
+                                 </button>
+                                 <span ng-show="templateAdd.parentTempSelected &&
+                                 ['row2'].contains(modRowKey) && 
+                                 ['col1','col2'].contains(colKey)"
+                                  style="float:right; margin-right:6px" class="checkbox">
+                                   <label>
+                                        <input type="checkbox" ng-model="rowCheckedVal"
+                                        ng-true-value="true"
+                                        ng-false-value="false"
+                                        ng-click="getColInherits(modRowKey, colKey, templateAdd.parentTempSelected, rowCheckedVal)"
+                                        ng-checked="inheritColumnCheck(colKey, modRowKey,templateAdd.inherits.containers)"/>
+                                        <b>Inherit</b>
+                                   </label>
+                                 </span>
+                              </span>
+                           </div>
+                           <div collapse="isCollapsed" class="widget-content" droppable drop="handleDrop" bin="bin" id="{{modRowKey}}+{{colKey}}+{{colValue}}">
+                           <div class="in" style="margin-left:15px;"  
+                            ng-repeat="(modItemKey, modItemValue) in colValue track by $index">
+                                 <div class="widget-box">
+                                    <div class="widget-title">
+                                     <a ng-click="isCollapsedModule = !isCollapsedModule">
+                                       <span class="icon"><i class="fa fa-wrench"></i>
+                                       </span>
+                                          <h5>{{getKey(modItemValue)}}</h5>
+                                       </a>
+                                    <button type="button" class="btn btn-danger btn-xs pull-right module-delete-btn" ng-click="deleteModule(modItemKey,colValue)"
+                                    ng-disabled="searchStringInArray(modRowKey) && rowCheckedVal">
+                                    Delete</button>
+                                    </div>
+                                    <div ng-repeat="(itemKey,itemValue) in modItemValue"
+                                         collapse="isCollapsedModule" class="widget-content nopadding">
+                                    <div ng-repeat="item in itemValue" class="form-group">
+                                                   <label class="col-sm-5 col-md-5 col-lg-4 control-label"><strong>
+                                                      {{item.id}}</strong>
+                                                   </label>
+                                                   <div ng-switch="domCheck(item)" class="col-sm-5 col-md-5 col-lg-6">
+                                                   <select ng-switch-when="select" ui-select2 data-placeholder="select one.." ng-model="item.param"
+                                                   ng-disabled="searchStringInArray(modRowKey) && rowCheckedVal">
+                                                            <option value=""></option>
+                                                            <option ng-repeat="op in selectOptions track by $index" ng-bind="op" value="{{op}}">
+                                                            </option>
+                                                   </select>
+                                                  <input ng-switch-when="text" class="form-control input-sm" ng-model="item.param"
+                                                  ng-disabled="searchStringInArray(modRowKey) && rowCheckedVal"/>
+                                                  <textarea rows="6" ng-switch-when="textarea" class="form-control input-sm" ng-model="item.param"
+                                                  ng-disabled="searchStringInArray(modRowKey) && rowCheckedVal">
+                                                  </textarea>
+                                              </div>
+                                          </div>
+                                    </div>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+
+                        <div class="row add-col">
+                           <div class="col-sm-11 col-md-11 col-lg-12">
+                              <button ng-show="checkRowForDeleteButton(modRowKey)" class="btn btn-xs btn-inverse pull-right btn-template-column-add" ng-click="addTempModulesAddNewCol(modRowVal)"
+                              ng-disabled="searchStringInArray(modRowKey)">+ Add Column
+                              </button>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row add-row">
+                     <div class="col-sm-11 col-md-11 col-lg-12">
+                        <button class="btn btn-xs btn-inverse pull-right" id="btn-template-row-add" ng-click="addTempModulesAddNewRow()">
+                           + Add Row
+                        </button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+        </div>
+
+        <div class="row" align="center">
+       <div class="col-sm-5"> 
+          <button type="submit" ng-click="saveTemplate(templateAdd)" class="btn btn-primary" id="btn-template-edit-submit">Save
+          </button>
+       </div>
+    </div>
+    </div>
+  </form>
+ </div>
+
+     <div id="sticky-module-sidebar">
+       <h4 align="center" style="color:white">Modules</h4>
+       <div class="col-lg-12 col-md-12 col-sm-12">
+          <div class="input-group">
+             <input type="text" class="form-control" ng-model="searchText" placeholder="Type and Search"/>
+             <span class="input-group-addon">
+                <i class="fa fa-search"></i>
+             </span>
+          </div>
+          <div id="module-content">
+             <div class="moduleList" id="{{value}}" ng-repeat="value in addmodulesList | filter:searchText" 
+             draggable>{{value.name}}</div>
+          </div>
+       </div>
+    </div>

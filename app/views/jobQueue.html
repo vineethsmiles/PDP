@@ -1,0 +1,41 @@
+<div id="content-header" class="mini">
+      <h1>Environment Configuration Status</h1>
+</div>
+
+<div id="breadcrumb">
+      <a href="#dashboard" title="Home" class="tip-bottom" data-original-title="Home"><i class="fa fa-home"></i>Home</a>
+      <a href="#Qa_Job_Queue" title="Config Status" class="current">Config Status</a>
+</div>
+
+<div class="alert alert-success" ng-show="alert">
+    <button class="close" data-dismiss="alert">×</button>
+    <strong><center>{{errMsg}}</center></strong> 
+</div>
+
+<div class="container-fluid">
+<center><img style = "position: absolute; z-index: 9999" ng-show="loading" 
+ src="img/ajax-loader.gif"></center>
+<form class="form-horizontal">
+<div class="row">
+<div class="col-xs-12">
+<div class="widget-box" ng-show="!alert && !loading">
+	<div class="widget-title">
+		<span class="icon">
+			<i class="fa fa-align-justify"></i>							
+		</span>
+		<h5>Configurations</h5>
+    <div class="right-inner-addon">
+    <button style="margin-top:3px; margin-left:695px" class="btn-primary btn-xs" ng-click="refreshStatus()">Refresh
+     </button>
+                    <i class="fa fa-search"></i>
+                    <input type="search" style="margin-top:3px; margin-right:2px" ng-model="filterOptions.filterText" class="btn-xs pull-right" placeholder="Search.."></input>
+    </div>
+	</div>
+  <div class="widget-content nopadding">
+     <div class="gridStyleJobQueue" ng-grid="gridOptionsJobQueueGrid"></div>
+  </div>
+</div> 
+</div>
+</div>
+</form>
+</div>

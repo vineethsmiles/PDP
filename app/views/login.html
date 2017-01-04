@@ -1,0 +1,51 @@
+<div class="container-fluid">
+<br><br>
+<div class="alert alert-success" ng-show="logout">
+		<button class="close" data-dismiss="alert">×</button>
+		<strong><center>{{loginMsg}}</center></strong> 
+</div>
+
+<div class="row">
+	<div class="col-md-6 col-md-offset-3 ">
+		<div class="widget-box">
+			<div class="widget-title">
+				<span class="icon">
+					<i class="fa fa-lock"></i>									
+				</span>
+				<h5>Login</h5>
+			</div>
+			<div class="widget-content nopadding">
+			<form method="POST" accept-charset="UTF-8" class="form-horizontal" id="auth-form">		
+				<div class="form-group">
+					<label class="col-sm-5 col-md-5 col-lg-3 control-label">Enterprise ID</label>
+					<div class="col-sm-5 col-md-5 col-lg-6">
+					  <input ng-required="true" class="form-control input-sm" name="uid" type="text" ng-model="uid"/>		
+                    </div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 col-md-5 col-lg-3 control-label">Password</label>
+					<div class="col-sm-5 col-md-5 col-lg-6">
+						<input ng-required="true" name="password" type="password" ng-model="pwd"/>		
+					</div>
+				</div>
+				<div class="form-group">
+					<label class="col-sm-5 col-md-5 col-lg-3 control-label">Environments</label>
+					<div class="col-sm-5 col-md-5 col-lg-6">
+						<select ng-required="true" id="log" ui-select2 ng-model="loginEnv" data-placeholder="Select Environment" ng-change="environmentSelect(loginEnv)">
+                        <option value=""></option>
+                        <option ng-repeat="i in environments">{{i.id}}</option>
+                        </select>		
+					</div>
+				</div>
+				
+				<div class="row text-center">
+					<div>
+						<button type="submit" ng-click="login(uid, pwd, loginEnv)" class="btn btn-inverse" id="login-btn">Login</button>
+					</div>
+				</div>
+			</form>					
+		  </div>
+		</div>
+	</div>
+</div>
+	</div>

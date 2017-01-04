@@ -1,0 +1,35 @@
+
+.config-param-delete, #add-env-btn, #add-param-btn {
+	
+	margin: 0 10px 0 0;
+}
+
+.form-horizontal .config-param-label {
+	
+	padding-top: 0;
+
+}
+
+.config-param-insert {
+	
+	margin: 0 5px 0 0;
+}
+
+.qa-param-update {
+	
+	position: relative;
+	left: 50%;
+}
+
+#no-qa-envs {
+	
+	text-align: center;
+}
+
+#qa-environment-params .form-group .param-select-container {
+	
+	padding: 0 25px;
+}
+
+
+

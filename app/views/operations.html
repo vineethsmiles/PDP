@@ -1,0 +1,82 @@
+<script type="text/ng-template" id="configUpdateConfirmation.html">
+    <div class="modal-body">
+        <div class="alert alert-info" role="alert">
+          <center>{{errorMsg}}</center>
+        </div>
+    </div>
+    <div class="modal-footer">
+            <button class="btn btn-warning" ng-click="$close()">OK</button>
+    </div>
+</script>
+
+<div id="content-header" class="mini">
+      <h1>Operations</h1>
+</div>
+
+<div id="breadcrumb">
+      <a href="#dashboard"><i class="fa fa-home"></i>Home</a>
+      <a href="#operations" title="Operations" class="current">Operations Config</a>
+</div>  
+
+<div class="container-fluid">
+<form class="form-horizontal">
+<div class="row">
+        <div class="col-xs-6">
+          <div class="widget-box">
+           <center><img style = "position: absolute; z-index: 9999" ng-show="loading" 
+           src="img/ajax-loader.gif"></center>
+            <div class="widget-title">
+              <span class="icon">
+                <i class="fa fa-align-justify"></i>                 
+              </span>
+              <h5>Environment Selected</h5>
+            </div>
+      <div class="form-group">
+        <label class="col-sm-5 col-md-5 col-lg-6 control-label">Environment Selected</label>
+          <div class="col-sm-5 col-md-5 col-lg-6">
+           <input type="text" ng-model="envSelected" readonly/>
+          </div>
+      </div>
+          </div>
+      </div>
+ </div>
+ </form>
+<div class="alert alert-success" ng-show="alert">
+    <button class="close" data-dismiss="alert">×</button>
+    <strong><center>{{errorMsg}}</center></strong> 
+</div>
+ 
+<div class="row">
+<div class="col-md-12 col-lg-12">
+<div ng-show="adminConfig" class="widget-box">
+  <div class="widget-title">
+    <span class="icon">
+      <i class="fa fa-align-justify"></i>                 
+    </span>
+    <h5>Configurations</h5>
+    <div class="right-inner-addon">
+                    <i class="fa fa-search"></i>
+                    <input type="search" style="margin-top:2px; margin-right:2px" ng-model="filterOptions.filterText" class="btn-xs pull-right" placeholder="Search.."></input>
+    </div>
+  </div>
+  <div class="gridWidthWrapper">
+     <div class="gridStyleOperationsPage" ng-grid="gridOptionsParameterGrid"></div>
+  </div>
+</div> 
+
+<div class="widget-box" ng-show="showParameterChangeGrid">
+  <div class="widget-title">
+    <span class="icon">
+      <i class="fa fa-align-justify"></i>                 
+    </span>
+    <h5>Parameter Changes</h5>
+    <button ng-show="isOperationsAdmin" class="btn btn-primary btn-sm pull-right" ng-click="updateParams(envSelected)">Update
+    </button>
+  </div>
+    <div class="gridWidthWrapper">
+    <div class="gridStyleOperationsPage" ng-grid="gridOptionsParameterChangeGrid"></div>
+    </div>
+</div>
+</div>
+</div>
+</div>

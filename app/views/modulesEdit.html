@@ -1,0 +1,129 @@
+<script type="text/ng-template" id="moduleUpdateConfirmation.html">
+    <div class="modal-body">
+        <div class="alert alert-info" role="alert">
+          <center>{{errorMsg}}</center>
+        </div>
+    </div>
+    <div class="modal-footer">
+            <button class="btn btn-warning" ng-click="$close()">OK</button>
+    </div>
+</script>
+
+<div id="content-header" class="mini">
+      <h1>Module: {{moduleData.name}}</h1>
+</div>
+
+<div id="breadcrumb">
+      <a href="#dashboard"><i class="fa fa-home"></i>Home</a>
+      <a href="#modulesList" title="Stores" class="current">Modules</a>
+      <a href="#modulesEdit" title="Edit" class="current">Edit {{moduleData.name}}</a>
+</div>
+
+<div ng-show="saveAlert" class="alert alert-info" style="display: block;">
+      <button class="close" data-dismiss="alert">×</button>
+      <center><strong>{{errorMsg}}</strong></center>
+</div>  
+
+<div class="container-fluid">
+   <form method="POST" accept-charset="UTF-8" class="form-horizontal" id="auth-form">
+      <div class="row">
+         <div class="col-xs-8">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon">
+                    <i class="fa fa-align-justify"></i>                 
+                  </span>
+                  <h5>Config:{{moduleData.name}}</h5>
+               </div>
+               <div class="widget-content nopadding">
+                  <div class="form-group">
+                     <label class="col-sm-5 col-md-5 col-lg-3 control-label">Name</label>
+                     <div class="col-sm-5 col-md-5 col-lg-6">
+                        <input class="form-control input-sm" readonly="readonly" 
+                        name="name" type="text" ng-model="moduleData.name">
+                     </div>
+                  </div>
+                  <div class="form-group">
+                     <div class="col-sm-9 col-md-9 col-lg-10">
+                        <label>
+                           <input id="global-disable-checkbox" name="global_disable" type="checkbox" ng-model="moduleData.global_disable" 
+                           ng-true-value="'yes'"
+                           ng-false-value="'no'"/> Disable all instances of this module
+                        </label>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+
+      <div class="row">
+         <div class="col-xs-8">
+            <div class="widget-box">
+               <div class="widget-title">
+                  <span class="icon">
+                     <i class="fa fa-align-justify"></i>                         
+                  </span>
+                  <h5>Parameters</h5>
+               </div>
+               <div class="widget-content nopadding">
+                  <div class="form-group">
+                  <div collapse="isCollapsedCol" class="widget-content">
+                  <div class="widget-box col-container" ng-repeat="(colKey, colValue) in moduleData.parameters track by $index">
+                           <div class="widget-title col-title">
+                              <a ng-click="isCollapsed = !isCollapsed">
+                                 <span class="icon"><i class="fa fa-arrow-right"></i></span>
+                                 <h5>{{colValue.modName}}</h5>
+                              </a>
+                               <button type="button" class="btn btn-danger btn-xs pull-right module-delete-btn" ng-click="deleteModule(colKey)">Delete</button>
+                           </div>
+                           <div collapse="isCollapsed" class="widget-content">
+                                 <div class="form-group">
+                                    <label class="col-md-5 col-lg-4 control-label">Name</label>
+                                    <input style="width:200px;"
+                                    type="text" ng-model="colValue.modName"
+                                    ng-required="true"/>
+                                 </div>
+                                 <div class="form-group">
+                                 <label class="col-md-5 col-lg-4 control-label">{{colValue.id}}
+                                 </label>
+                                    <div ng-switch="domSelectBoxCheck(colValue)">
+                                       <select ui-select2 data-placeholder="{{domSelectBoxCheck(colValue)}}" 
+                                       ng-model="colValue.param"
+                                       ng-required="true"
+                                       ng-change="inputTypeSelect(colValue.param, colValue)">
+                                           <option value=""></option>
+                                           <option>text</option>
+                                           <option>textarea</option>
+                                           <option>select</option>
+                                       </select>
+                                       <div class="form-group" ng-repeat="(k,v) in colValue.param track by $index" ng-switch-when="select">
+                                       <button style="float:right;margin-right:120px" type="button" class="btn btn-danger btn-xs module-delete-btn" ng-click="deleteOption(colValue.param, $index)">Delete
+                                       </button>
+                                        <label class="col-md-5 col-lg-4 control-label">option{{$index+1}}
+                                        </label>
+                                        <input style="float:right; width:190px; margin-right:72px" type="text" class="col-md-5 col-lg-4 input-sm" ng-model="colValue.param[k]" placeholder="option.."/>
+                                       </div>
+                                       <button ng-switch-when="select" type="button" ng-click="addOptions(colValue.param)" class="btn btn-xs btn-inverse pull-right btn-module-option-add">+ Add Option                                 
+                                       </button>
+                                   </div>
+                               </div>
+                        </div>  
+                     </div>
+                  </div>
+                 <div class="row add-col">
+                         <div class="col-sm-11 col-md-11 col-lg-12">
+                            <button class="btn btn-xs btn-inverse pull-right btn-template-column-add" ng-click="addNewModule()">+ Add Parameter
+                            </button>
+                         </div>
+                 </div>
+               </div>
+            </div>
+         </div>
+         <div align="center">
+               <button ng-show="isModulesEditAdmin" type="submit" class="btn btn-primary" id="btn-template-edit-submit" ng-click="updateModule(moduleData)">Update</button>
+         </div>
+      </div>
+      </div>
+   </form>
+</div>

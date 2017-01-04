@@ -1,0 +1,15 @@
+@CHARSET "UTF-8";
+
+
+
+#module-edit-form  .form-actions {
+	
+	padding: 10px 40px 10px 300px;
+
+}
+
+.form-group .help-inline {
+	
+	color: #B94A48; 
+	margin-left: 5px;
+}
